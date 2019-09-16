@@ -1,0 +1,10 @@
+version: '2'
+services:
+  server:
+    build: server/
+    ports:
+      - "8444:8444"
+  client:
+    build: client/
+    ports:
+      - "80:80"
