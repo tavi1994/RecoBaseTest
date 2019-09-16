@@ -1,0 +1,53 @@
+.navbar-text{
+    font-size: 90%;
+    color: rgb(250, 226, 195);
+    font-style: italic;
+}
+
+#navbarText{
+    margin-left: 2%;
+}
+
+#navText{
+    padding-left: 1%;
+    font-size: 120%;
+}
+
+.navbar-brand{
+    box-align: center;
+}
+
+#topBar {
+    background-color: #b66532;
+}
+
+#maintitle {
+    font-stretch: expanded;
+    font-size: 200%;
+    font-weight: bolder;
+    color: #492209 ;
+    margin-left: 3%;
+}
+
+#logo {
+    width:50px;
+    height:50px;
+}
+
+#recordTable {
+    width: 90%;
+    margin-left: 5%;  
+}
+
+#myCollection {
+    font-size: 35px;
+    /* padding-left: 1%; */
+    padding-bottom: 1%;
+    padding-left: 5%;
+    color: #414141
+}
+
+#tableButton {
+    margin-top: 5%;
+    padding: 3px 10px; 
+}
