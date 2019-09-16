@@ -1,82 +1,140 @@
 const recordTable = document.getElementById("recordTable");
-let formDataObj = {};
+var records = [];
 
-function submitInput(form) {
+function addRecord(form) {
+    let record = {};
     for (let element of form.elements) {
         if (element.id) {
-            formDataObj[element.id] = element.value;
-            console.log(formDataObj[element.id]);
+            record[element.id] = element.value;
         }
     }
     
-
     // const formDataString = JSON.stringify(formDataObj);
     //console.log(JSON.stringify(formDataObj));
     
-    registerRecord();
-    console.log(formDataObj[element.id]);
+    registerRecord(record);
     // makeRequest("POST", recordURL).then((req) => {
     //     notification = JSON.parse(req.responseText);
     //     joinNotify.innerText = notification.message
     // }).catch((error) => { console.log(error.message) });
-    $('#exampleModal').modal('toggle');
+    $('#addNewModal').modal('hide');
     return false;
 }
 
-function registerRecord() {
+function updateRecord(form) {
+    let record = {};
+    for (let element of form.elements) {
+        if (element.id) {
+            let id = element.id;
+            id = id.replace('update', '');
+            id = id.toLowerCase();
+            record[id] = element.value;
+        } 
+    }
+    
+    // const formDataString = JSON.stringify(formDataObj);
+    //console.log(JSON.stringify(formDataObj));
+    
+    editRecord(record.recordid, record);
+    // makeRequest("POST", recordURL).then((req) => {
+    //     notification = JSON.parse(req.responseText);
+    //     joinNotify.innerText = notification.message
+    // }).catch((error) => { console.log(error.message) });
+    // $('#addNewModal').modal('hide');
+    return false;
+}
+
+function registerRecord(record) {
     const req = new XMLHttpRequest();
     req.onload = () => {
         location.href = "index.html";
     };
-    req.open('POST', 'http://34.89.0.182:8444/record');
+    req.open('POST', 'http://34.89.0.182:8444/record/');
     req.setRequestHeader('Content-Type', 'application/json');
-    req.send(JSON.stringify(formDataObj));
-    //console.log(JSON.stringify(formDataObj));
-
+    req.send(JSON.stringify(record));
 }
 
-function tableEntries(table) {
-    let row = document.createElement("tr");
-    let tbutton = document.createElement('button');
-    tbutton.type = "button";
-    tbutton.className = "btn btn-danger";
-    tbutton.innerHTML = "remove";
-    tbutton.id = "tableButton";
-    tbutton.addEventListener("click", function (e) {
+function editRecord(id, record) {
+    const req = new XMLHttpRequest();
+    req.onload = () => {
+        location.href = "index.html";
+    };
+    req.open('PUT', 'http://34.89.0.182:8444/record/' + id);
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.send(JSON.stringify(record));
+}
+
+function createDeleteButton(record) {
+    let button = document.createElement('button');
+    button.type = "button";
+    button.className = "btn btn-danger";
+    button.innerHTML = "remove";
+    button.id = "tableButton";
+    button.dataset['id'] = record.id;
+    button.addEventListener("click", function (event) {
         // build and send http delete here
         this.parentNode.parentNode.removeChild(this.parentNode);
-        //console.log(formDataObj.innerHTML);
-        // const recReq = new XMLHttpRequest;
+        const req = new XMLHttpRequest;
         
-        // recReq.open("DELETE", 'http://35.235.59.31:8444/record'+"/"+element.value);
-        // recReq.setRequestHeader('Content-Type', 'application/json');
-        // recReq.send(null);
+        req.open("DELETE", 'http://34.89.0.182:8444/record/' + event.toElement.dataset.id);
+        req.setRequestHeader('Content-Type', 'application/json');
+        req.send(null);
     });
-    
 
-    for (let i = 1; i < arguments.length; i++) {
+    return button;
+}
+
+function createUpdateButton(record) {
+    let button = document.createElement('button');
+    button.type = "button";
+    button.className = "btn btn-primary";
+    button.innerHTML = "update";
+    button.id = "tableButton";
+    button.dataset['id'] = record.id;
+
+    button.addEventListener("click", function (event) {
+        $('#updateModal').modal('show');
+        $('#updateLabel').val(record.label);
+        $('#updateTitle').val(record.title);
+        $('#updateArtist').val(record.artist);
+        $('#updateYear').val(record.year);
+        $('#updateValue').val(record.value);
+        $('#updateRecordId').val(record.id);
+    });
+
+    return button;
+}
+
+function tableEntries(table, record) {
+    let row = document.createElement("tr");
+    const deleteButton = createDeleteButton(record);
+    const updateButton = createUpdateButton(record);
+
+    for (let param in record) {
+        if (param === "id") {
+            continue;
+        }
         let tbox = document.createElement("td");
-        tbox.innerHTML = arguments[i];
+        tbox.innerHTML = param === "value" ? "£" + record[param] : record[param];
         row.append(tbox);
-
     }
+
     table.append(row);
-    row.append(tbutton);
+    row.append(updateButton);
+    row.append(deleteButton);
 }
 
 function onLoadRec() {
-
     const recReq = new XMLHttpRequest;
     recReq.onload = () => {
-        data = JSON.parse(recReq.response);
-        for (let i = 0; i < data.length; i++) {
-            let field = data[i];
-            tableEntries(recordTable, field["label"], field["title"], field["artist"], field["year"], "£" + field["value"]);
+        records = JSON.parse(recReq.response);
+        for (let i = 0; i < records.length; i++) {
+            let record = records[i];
+            tableEntries(recordTable, record);
         }
     }
     recReq.open('GET', 'http://34.89.0.182:8444/record');
     recReq.send();
-
 }
 
 

@@ -34,45 +34,83 @@
     </nav>
     <br>
 
-    <h1 id="myCollection">My Collection <button type="button" class="btn btn-success" data-toggle="modal"
-            data-target="#exampleModal">Add new item</button> </h1>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <h1 id="myCollection">
+        My Collection
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addNewModal">
+            Add new item
+        </button>
+    </h1>
+    <div class="modal fade" id="addNewModal" tabindex="-1" role="dialog" aria-labelledby="addNewModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add a new record to your collection</h5>
+                    <h5 class="modal-title" id="updateModalLabel">Add a new record to your collection</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <form  onsubmit="return submitInput(this)">
+                <form onsubmit="return addRecord(this)">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">Label ID</label>
-                            <textarea class="form-control" id="label" rows="1"></textarea>
+                            <input class="form-control" id="label" rows="1" type="text"/>
                             <label for="exampleFormControlTextarea2">Title</label>
-                            <textarea class="form-control" id="title" rows="1"></textarea>
+                            <input class="form-control" id="title" rows="1" type="text"/>
                             <label for="exampleFormControlTextarea3">Artist</label>
-                            <textarea class="form-control" id="artist" rows="1"></textarea>
+                            <input class="form-control" id="artist" rows="1" type="text"/>
                             <label for="exampleFormControlTextarea4">Year</label>
-                            <textarea class="form-control" id="year" rows="1"></textarea>
+                            <input class="form-control" id="year" rows="1" type="number"/>
                             <label for="exampleFormControlTextarea5">Value</label>
-                            <textarea class="form-control" id="value" rows="1"></textarea>
+                            <input class="form-control" id="value" rows="1" type="number"/>
                         </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Add</button>
-                                </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNewModalLabel">Update record</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
+                <form onsubmit="return updateRecord(this)">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="updateLabel">Label ID</label>
+                            <input class="form-control" id="updateLabel" rows="1" type="text" />
+                            <label for="updateTitle">Title</label>
+                            <input class="form-control" id="updateTitle" rows="1" type="text" />
+                            <label for="updateArtist">Artist</label>
+                            <input class="form-control" id="updateArtist" rows="1" type="text" />
+                            <label for="updateYear">Year</label>
+                            <input class="form-control" id="updateYear" rows="1" type="number" />
+                            <label for="updateValue">Value</label>
+                            <input class="form-control" id="updateValue" rows="1" type="number" />
+                            <input type="hidden" id="updateRecordId" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </head>
-
 
 <body onload="onLoadRec()">
     <table class="table" id="recordTable">
